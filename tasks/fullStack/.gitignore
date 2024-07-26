@@ -41,3 +41,6 @@ yarn-debug.log*
 
 # Ignore this big file to clone, and push code faster
 /db/challenge_development.dump
+
+# Ignore IDE files
+.idea

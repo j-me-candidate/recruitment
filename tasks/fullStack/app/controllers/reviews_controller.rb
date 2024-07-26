@@ -2,6 +2,10 @@ class ReviewsController < ApplicationController
 
   DEFAULT_TAGS = ['default']
 
+  def new
+    @review = Product.find(params[:product_id]).reviews.new
+  end
+
   def index
     if params[:shop_id].present? && Shop.where("id = #{params[:shop_id]}").present?
       params[:per_page] ||= 10
@@ -17,16 +21,20 @@ class ReviewsController < ApplicationController
   end
 
   def create
-    # TODO: Create reviews in background. No need to show errors (if any) to users, it's fine to skip creating the review silently when some validations fail.
-
-    tags = tags_with_default(params)
-    Review.create(product_id: params[:product_id], body: params[:body], rating: params[:rating], reviewer_name: params[:reviewer_name], tags: tags)
-
+    ReviewCreationWorker.perform_async(review_params[:product_id],
+                                       review_params[:body],
+                                       review_params[:rating],
+                                       review_params[:reviewer_name],
+                                       tags_with_default(review_params))
     flash[:notice] = 'Review is being created in background. It might take a moment to show up'
-    redirect_to action: :index, shop_id: Product.find_by(id: params[:product_id]).shop_id
+    redirect_to action: :index, shop_id: Product.find_by(id: review_params[:product_id]).shop_id
   end
 
   private
+
+  def review_params
+    params.require(:review).permit(:body, :rating, :reviewer_name, :tags, :product_id)
+  end
 
   # Prepend `params[:tags]` with tags of the shop (if present) or DEFAULT_TAGS
   # For simplicity, let's skip the frontend for `tags`, and just assume frontend can somehow magically send to backend `params[:tags]` as a comma-separated string
@@ -38,7 +46,9 @@ class ReviewsController < ApplicationController
   def tags_with_default(params)
     product = Product.find_by(id: params[:product_id])
     default_tags = product.shop.tags || DEFAULT_TAGS
-    default_tags.concat(params[:tags].split(',')).uniq
+    if params[:tags].present?
+      default_tags.concat(params[:tags].split(',')).uniq
+    end
+    default_tags
   end
-
 end
