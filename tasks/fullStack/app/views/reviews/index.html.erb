@@ -1,0 +1,12 @@
+<% @data.each do |datum| %>
+  <div class="product-title">
+    Product <%= datum[:product].title %>
+  </div>
+
+  <% datum[:reviews].each do |review| %>
+    <div class="rating">
+      Rating <%= review.rating %>
+    </div>
+    <p class="body"><%= review.body %></p>
+  <% end %>
+<% end %>
