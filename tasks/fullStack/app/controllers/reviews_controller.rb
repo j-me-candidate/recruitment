@@ -1,4 +1,5 @@
 class ReviewsController < ApplicationController
+  before_action :set_shop, only: [:index]
 
   DEFAULT_TAGS = ['default']
 
@@ -7,15 +8,16 @@ class ReviewsController < ApplicationController
   end
 
   def index
-    if params[:shop_id].present? && Shop.where(id: params[:shop_id]).exists?
-      params[:per_page] ||= 10
-      offset = params[:page].to_i * params[:per_page]
+    @shops = Shop.order(:name).pluck(:name, :id)
 
-      @data = []
-      products = Product.where(shop_id: params[:shop_id]).sort_by(&:created_at)[offset..(offset + params[:per_page])]
-      products.each do |product|
-        reviews = product.reviews.sort_by(&:created_at)[offset..(offset + params[:per_page])]
-        @data << { product: product, reviews: reviews }
+    respond_to do |format|
+      format.html do
+        @products = fetch_products
+        @paginated_reviews = paginate_reviews_for_products(@products)
+      end
+      format.js do
+        @product = Product.find(params[:product_id])
+        @paginated_reviews = paginate_reviews_for_product(@product)
       end
     end
   end
@@ -50,5 +52,33 @@ class ReviewsController < ApplicationController
       default_tags.concat(params[:tags].split(',')).uniq
     end
     default_tags
+  end
+
+  def set_shop
+    @shop = params[:shop_id].present? ? Shop.find_by(id: params[:shop_id]) : nil
+  end
+
+  def fetch_products
+    page = params[:page] || 1
+
+    if @shop.present?
+      @shop.products.order(:created_at).includes(:reviews).page(page).per(2)
+    else
+      Product.order(:created_at).includes(:reviews).page(page).per(2)
+    end
+  end
+
+  def paginate_reviews_for_products(products)
+    paginated_reviews = {}
+    review_page = params[:review_page] || 1
+    products.each do |product|
+      paginated_reviews[product.id] = product.reviews.order(:created_at).page(review_page).per(3)
+    end
+    paginated_reviews
+  end
+
+  def paginate_reviews_for_product(product)
+    review_page = params[:review_page] || 1
+    product.reviews.order(:created_at).page(review_page).per(3)
   end
 end

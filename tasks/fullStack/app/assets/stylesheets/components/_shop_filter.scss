@@ -1,0 +1,25 @@
+.shop-filter {
+    text-align: right;
+    margin: 0 auto;
+    width: 1080px;
+
+    &__label {
+        margin-right: 10px;
+        font-size: 14px;
+        font-weight: 400;
+        line-height: 20px;
+        color: #787878;
+    }
+
+    &__dropdown {
+        width: 200px;
+        border: 1px solid #E0E0E0;
+        padding: 8px 12px;
+
+        color: #333333;
+        font-size: 14px;
+        font-weight: 400;
+        line-height: 20px;
+        text-align: left;
+    }
+}

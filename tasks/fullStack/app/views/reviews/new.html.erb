@@ -1,28 +1,30 @@
-<div class="review-form">
-  <div class="review-form__info">
-    <div class="review-form__info--section">
-      <div class="review-form__text review-form__text--light">Shop Name:</div>
-      <span class="review-form__text review-form__text--bold"><%= @review.product.shop.name %></span>
+<div class="centred">
+  <div class="review-form">
+    <div class="review-form__info">
+      <div class="review-form__info--section">
+        <div class="review-form__text review-form__text--light">Shop Name:</div>
+        <span class="review-form__text review-form__text--bold"><%= @review.product.shop.name %></span>
+      </div>
+      <div class="review-form__info--section">
+        <div class="review-form__text review-form__text--light">Product Name:</div>
+        <span class="review-form__text review-form__text--bold"><%= @review.product.title %></span>
+      </div>
     </div>
-    <div class="review-form__info--section">
-      <div class="review-form__text review-form__text--light">Product Name:</div>
-      <span class="review-form__text review-form__text--bold"><%= @review.product.title %></span>
+    <div>
+      <%= form_for @review do |form| %>
+        <%= form.label :rating, "Rating (0 to 5)", class: "review-form__text review-form__text--light" %>
+        <%= form.number_field :rating, step: 1.0, min: 0, max: 5, class: "review-form__input" %>
+
+        <%= form.label :reviewer_name, "Name", class: "review-form__text review-form__text--light" %>
+        <%= form.text_field :reviewer_name, placeholder: "Enter your name", class: "review-form__input" %>
+
+        <%= form.label :body, "Review", class: "review-form__text review-form__text--light" %>
+        <%= form.text_area :body, class: "review-form__input review-form__input--body", placeholder: "Write your review here" %>
+
+        <%= form.hidden_field :product_id, value: @review.product.id %>
+
+        <%= form.submit "Submit Review", class: "review-form__submit" %>
+      <% end %>
     </div>
-  </div>
-  <div>
-    <%= form_for @review do |form| %>
-      <%= form.label :rating, "Rating (0 to 5)", class: "review-form__text review-form__text--light" %>
-      <%= form.number_field :rating, step: 1.0, min: 0, max: 5, class: "review-form__input" %>
-
-      <%= form.label :reviewer_name, "Name", class: "review-form__text review-form__text--light" %>
-      <%= form.text_field :reviewer_name, placeholder: "Enter your name", class: "review-form__input" %>
-
-      <%= form.label :body, "Review", class: "review-form__text review-form__text--light" %>
-      <%= form.text_area :body, class: "review-form__input review-form__input--body", placeholder: "Write your review here" %>
-
-      <%= form.hidden_field :product_id, value: @review.product.id %>
-
-      <%= form.submit "Submit Review", class: "review-form__submit" %>
-    <% end %>
   </div>
 </div>

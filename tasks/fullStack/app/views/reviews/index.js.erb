@@ -1,0 +1,6 @@
+var reviews = document.getElementById("product-<%= j @product.id %>-reviews");
+reviews.innerHTML = `
+  <% @paginated_reviews.each do |review| %>
+    <%= j render review %>
+  <% end %>
+  <%= j paginate @paginated_reviews, param_name: :review_page, remote: true, params: { product_id: @product.id } %>`;
