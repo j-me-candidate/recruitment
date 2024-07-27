@@ -23,7 +23,7 @@ class ReviewsController < ApplicationController
   end
 
   def create
-    tags = TagService.tags_with_default(review_params[:product_id], review_params[:tags])
+    tags = TagService.tags_with_default(review_params[:product_id], review_params[:tags] || '')
     ReviewCreationWorker.perform_async(review_params[:product_id],
                                        review_params[:body],
                                        review_params[:rating],
