@@ -1,0 +1,90 @@
+.product {
+  padding: 20px;
+  background: #FCFCFC;
+  height: 619px;
+  width: 1080px;
+  display: flex;
+  margin: 12px auto 37px;
+
+  &:first-of-type {
+    margin-bottom: 37px;
+    margin-top: 12px;
+  }
+
+  &__header {
+    display: inline-block;
+    height: 100%;
+    margin-right: 20px;
+  }
+
+  &__title {
+    font-size: 16px;
+    font-weight: 700;
+    line-height: 20px;
+    color: #333333;
+  }
+
+  &__logo {
+    width: 200px;
+    height: 200px;
+    margin-bottom: 7px;
+  }
+
+  &__reviews {
+    width: 100%;
+    display: flex;
+    justify-content: space-between;
+    flex-direction: column;
+  }
+
+  &__review {
+    &--person {
+      display: flex;
+      align-items: center;
+      font-size: 14px;
+      font-weight: 400;
+      line-height: 20px;
+      color: #333333;
+      margin-bottom: 4px;
+
+      img {
+        width: 32px;
+        height: 32px;
+        border-radius: 9999px;
+        margin-right: 8px;
+      }
+    }
+
+    &--time-ago {
+      color: #637381;
+      font-size: 14px;
+      font-weight: 500;
+      line-height: 20px;
+      margin-left: 15px;
+    }
+
+    &--rating {
+      display: flex;
+      align-items: center;
+    }
+
+    &--star {
+      color: gold;
+    }
+
+    &--body {
+      margin-top: 12px;
+      font-size: 14px;
+      font-weight: 400;
+      line-height: 20px;
+    }
+  }
+
+  &__pagination {
+    padding-top: 20px;
+    padding-bottom: 20px;
+    width: 100%;
+    display: flex;
+    justify-content: center;
+  }
+}

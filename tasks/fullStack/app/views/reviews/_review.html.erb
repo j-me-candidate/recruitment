@@ -1,0 +1,20 @@
+<div class="product__review">
+  <div class="product__review--person">
+    <%= image_tag "https://dhh.dk/images/headshot-2017-full.jpg" %>
+    <%= review.reviewer_name %>
+  </div>
+  <div class="product__review--rating">
+    <% review.rating.to_i.times do %>
+      <span class="product__review--star">&#9733;</span>
+    <% end %>
+    <% (5 - review.rating.to_i).times do %>
+      <span class="product__review--star">&#9734;</span>
+    <% end %>
+    <span class="product__review--time-ago">
+      <%= time_ago_in_words(review.created_at) %> ago
+    </span>
+  </div>
+  <div class="product__review--body">
+    <%= simple_format review.body %>
+  </div>
+</div>

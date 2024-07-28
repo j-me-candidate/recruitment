@@ -1,0 +1,28 @@
+<div class="horizontal-centred">
+  <div class="shop-filter">
+    <span class="shop-filter__label">Filter by shop</span>
+    <%= select_tag 'shop', options_for_select(@shops, @shop&.id), id: "shop-dropdown", class: 'shop-filter__dropdown', include_blank: true %>
+  </div>
+  <% @products.each do |product| %>
+    <div class="product">
+      <div class="product__header">
+        <%= image_tag "https://static-00.iconduck.com/assets.00/openai-icon-2021x2048-4rpe5x7n.png", class: "product__logo" %>
+        <div class="product__title"><%= product.title %></div>
+      </div>
+      <div class="product__reviews" id="product-<%= product.id %>-reviews">
+        <% if @paginated_reviews[product.id].present? %>
+          <% @paginated_reviews[product.id].each do |review| %>
+            <%= render review %>
+          <% end %>
+        <% else %>
+          <p>No reviews yet</p>
+        <% end %>
+        <%= paginate @paginated_reviews[product.id], param_name: :review_page, remote: true, params: { product_id: product.id } %>
+      </div>
+    </div>
+  <% end %>
+
+  <div class="product__pagination">
+    <%= paginate @products %>
+  </div>
+</div>
